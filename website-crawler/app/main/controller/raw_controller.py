@@ -8,7 +8,7 @@ from ..service.mailer_service import MailUtilities
 from ..service.raw_service import crawl_by_url, crawl_by_file, get_external_urls
 from ..service.constant_service import ConstantService
 import logging
-from app.main.util.my_thread import execute
+from ..util.my_thread import execute
 
 
 api = RawDto.api

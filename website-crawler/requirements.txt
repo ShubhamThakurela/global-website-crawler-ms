@@ -35,6 +35,7 @@ pyrsistent==0.18.0
 python-dateutil==2.8.2
 python-dotenv==0.19.2
 pytz==2021.3
+pymysql
 requests==2.27.1
 selenium
 six==1.16.0

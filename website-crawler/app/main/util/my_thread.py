@@ -1,4 +1,3 @@
-
 from ..service.raw_service import crawl_by_file, get_url_to_scrap, zipdir, web_summary
 from ..service.constant_service import ConstantService
 from threading import Barrier, Thread
@@ -8,9 +7,10 @@ import shutil
 import time
 
 
-def run(url_list, check_history, days_history, history_path,  out_path, internal_page, internal_page_limit, barrier):
-    crawl_by_file(url_list, check_history, days_history, history_path,  out_path, internal_page, internal_page_limit)
+def run(url_list, check_history, days_history, history_path, out_path, internal_page, internal_page_limit, barrier):
+    crawl_by_file(url_list, check_history, days_history, history_path, out_path, internal_page, internal_page_limit)
     barrier.wait()
+
 
 def execute(check_history, month_history, history_path, file_path, out_path, internal_page, internal_page_limit):
     try:
@@ -25,7 +25,9 @@ def execute(check_history, month_history, history_path, file_path, out_path, int
         barrier = Barrier(thread_size)
         threads = []
         for i in range(thread_size):
-            threads.append(Thread(target=run, args=(chunk_list[i], check_history, month_history, history_path, out_path, internal_page, internal_page_limit, barrier)))
+            threads.append(Thread(target=run, args=(
+                chunk_list[i], check_history, month_history, history_path, out_path, internal_page, internal_page_limit,
+                barrier)))
             print("Thread is starting", threads[i])
             threads[-1].start()
             time.sleep(1)
@@ -42,10 +44,8 @@ def execute(check_history, month_history, history_path, file_path, out_path, int
         web_summary(out_path)
         zip_file_path = zipdir(out_path, dest_path)
 
-
         end_time = time.time()
         print("Processing Time: ", '{:.3f} sec'.format(end_time - start_time))
         return zip_file_path
     except Exception as e:
         print(str(e))
-

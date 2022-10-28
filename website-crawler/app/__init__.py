@@ -8,18 +8,21 @@ from .main.service.constant_service import ConstantService
 from logging.handlers import RotatingFileHandler
 import logging
 
-
 logging.basicConfig(
-    handlers=[RotatingFileHandler(ConstantService.log_path()+'/website-crawl.log', backupCount=10)],
+    handlers=[RotatingFileHandler(ConstantService.log_path() + '/website-crawl.log', backupCount=10)],
     level=logging.DEBUG,
     format=f'%(asctime)s %(api_key)s %(pathname)s %(filename)s %(module)s %(funcName)s %(lineno)d %(levelname)s %(message)s'
 )
 
 old_factory = logging.getLogRecordFactory()
+
+
 def record_factory(*args, **kwargs):
     record = old_factory(*args, **kwargs)
     record.api_key = "KV2APP00004"
     return record
+
+
 logging.setLogRecordFactory(record_factory)
 
 blueprint = Blueprint('api', __name__)
@@ -31,6 +34,6 @@ api = Api(blueprint,
           )
 
 api.add_namespace(raw, path='/raw')
-api.add_namespace(target, path='/target')
-api.add_namespace(semantic, path='/semantic')
-api.add_namespace(ai, path='/ai')
+# api.add_namespace(target, path='/target')
+# api.add_namespace(semantic, path='/semantic')
+# api.add_namespace(ai, path='/ai')

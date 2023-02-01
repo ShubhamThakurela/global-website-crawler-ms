@@ -1,4 +1,7 @@
-from app.main.database.connector import db_connection, CREDENTIALS
+import traceback
+import logging
+
+from ..database.connector import db_connection, CREDENTIALS
 
 
 def prepare_update(data_dict, data_id):
@@ -28,7 +31,8 @@ def insert_update_scraping_detail(data_dict):
     try:
         connection = db_connection()
         cursor = connection.cursor()
-        cursor.execute("SELECT sd_id FROM {}.scraping_detail WHERE web_url='{}'".format(CREDENTIALS['DATABASE'], data_dict['web_url']))
+        cursor.execute("SELECT sd_id FROM {}.scraping_detail WHERE web_url='{}'".format(CREDENTIALS['DATABASE'],
+                                                                                        data_dict['web_url']))
         s_detail = cursor.fetchone()
         if s_detail:
             sd_id = s_detail[0]
@@ -37,7 +41,8 @@ def insert_update_scraping_detail(data_dict):
             cursor.execute(query, update_data)
         else:
             insert_data, expression_col, expression_val = prepare_insert(data_dict)
-            query = "INSERT INTO " + CREDENTIALS['DATABASE'] + ".scraping_detail (" + expression_col + ") VALUES (" + expression_val + ")"
+            query = "INSERT INTO " + CREDENTIALS[
+                'DATABASE'] + ".scraping_detail (" + expression_col + ") VALUES (" + expression_val + ")"
             cursor.execute(query, insert_data)
             sd_id = cursor.lastrowid
         connection.commit()
@@ -46,3 +51,39 @@ def insert_update_scraping_detail(data_dict):
     except Exception as e:
         print(str(e))
         return None
+
+
+class scrapping_orm(object):
+    def __int__(self):
+        pass
+
+    @staticmethod
+    def fetch_complete_details(query_dict):
+        try:
+            connection = db_connection()
+            cursor = connection.cursor()
+            for key, value in query_dict.items():
+                if key.__contains__("start_dt") and value is not None:
+                    que = str(key) + " " + ">= " + "'" + str(value) + "'"
+                    a = "select * from crawl_engine.scraping_detail" + " where " + que
+                    cursor.execute(a)
+                    data = cursor.fetchall()
+                    connection.commit()
+                    connection.close()
+                    return data
+                elif key.__contains__("response_code") and value is not None:
+                    que = "select * from crawl_engine.scraping_detail" + " where" + ' http_code ' + "= " + str(value)
+
+            # for key, value in query_dict.items():
+            #     if key.__contains__("start_dt"):
+            #         que = str(key) + " " + ">= " + "'" + str(value) + "'"
+            #         a = "select * from crawl_engine.scraping_detail" + " where " + que
+                    cursor.execute(que)
+                    data = cursor.fetchall()
+                    connection.commit()
+                    connection.close()
+                    return data
+        except Exception as e:
+            print(e)
+            print(str(traceback.format_exc()))
+            logging.error(str(e))

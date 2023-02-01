@@ -4,6 +4,7 @@ import datetime
 from app.main.constant import paths
 
 
+
 class ConstantService:
     @staticmethod
     def fetched_scraped_data():
@@ -17,6 +18,9 @@ class ConstantService:
     def histroy_path():
         return paths.HISTORY_PATH
 
+    @staticmethod
+    def data_out_path():
+        return paths.SCRAPPED_PATH
     @staticmethod
     def cc_mail_id():
         return ""

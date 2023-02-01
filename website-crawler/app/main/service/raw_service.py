@@ -67,7 +67,8 @@ def crawl_by_url(org_url, internal=True, internal_limit=51):
         # Extract data using selenium
         is_js_page = False
         if home_page_data['active'] in [1, 2]:
-            is_js_page = any(js_str in home_content.lower().replace("\n", " ") for js_str in ConstantService.get_js_page_identifier())
+            is_js_page = any(js_str in home_content.lower().replace("\n", " ") for js_str in
+                             ConstantService.get_js_page_identifier())
 
         if is_js_page or not home_content.strip() or home_page_data['status_code'] != 200:
             selenium_obj = get_by_selenium(org_url)
@@ -195,7 +196,8 @@ def process_internal(internal_pages, org_data, internal_limit):
             # Extract data using selenium
             is_js_page = False
             if subpage_page_data['active'] in [1, 2]:
-                is_js_page = any(js_str in sub_page_content.lower() for js_str in ConstantService.get_js_page_identifier())
+                is_js_page = any(
+                    js_str in sub_page_content.lower() for js_str in ConstantService.get_js_page_identifier())
 
             if is_js_page or not sub_page_content.strip() or subpage_page_data['status_code'] != 200:
                 selenium_obj = get_by_selenium(page_url)
@@ -290,7 +292,9 @@ def get_website_links_from_response(soup, url, org_data, level=0):
 
             # Internal links
             domain_from_href = get_domain(href)
-            if domain_name in domain_from_href or (redirected_domain and (redirected_domain in domain_from_href or redirected_domain.split('.')[0] + '.' in domain_from_href)):
+            if domain_name in domain_from_href or (redirected_domain and (
+                    redirected_domain in domain_from_href or redirected_domain.split('.')[
+                0] + '.' in domain_from_href)):
                 if level != 0:
                     new_href = href.replace('http://', '')
                     new_href = new_href.replace('https://', '')
@@ -379,7 +383,10 @@ def extract_page_content(soup):
 
 def create_com(url):
     urllist = []
-    url = url.replace("https://www.", "").replace("https://", "").replace("http://", "").replace("http://www.","").replace("https://","").replace("www.", "")
+    url = url.replace("https://www.", "").replace("https://", "").replace("http://", "").replace("http://www.",
+                                                                                                 "").replace("https://",
+                                                                                                             "").replace(
+        "www.", "")
     if "https://www." not in url:
         urllist.append("https://www." + url)
     if "https://" not in url:
@@ -390,7 +397,7 @@ def create_com(url):
         urllist.append("http://" + url)
     return urllist
 
-    
+
 def request_data(page_url):
     data_dict = {}
     # Get Random User Agent String.
@@ -401,7 +408,7 @@ def request_data(page_url):
     for url in url_list:
         response_url = ''
         try:
-            response = requests.get(url, headers=headers, timeout=15, allow_redirects=True)
+            response = requests.get(url, headers=headers, timeout=40, allow_redirects=True)
             status_code = response.status_code
             response_url = response.url
             response_txt = response.content
@@ -460,13 +467,15 @@ def prepare_https_url(url):
     url = url.replace('https://', '')
     url = url.replace('www.', '')
     url = url.strip()
-    return 'https://www.'+url
+    return 'https://www.' + url
 
 
 def extract_meta_data(soup):
     try:
         metas = soup.find_all('meta')
-        meta_dict = {'description': '', 'keywords': '', 'title': '', 'tags': '', 'content_type': '', 'registration_required': '', 'customer_type': '', 'sales_availability': ''}
+        meta_dict = {'description': '', 'keywords': '', 'title': '', 'tags': '', 'content_type': '',
+                     'registration_required': '', 'customer_type': '', 'sales_availability': ''}
+
         for tag in metas:
             if 'name' in tag.attrs.keys():
                 meta_dict = extract_meta_from_name(tag, meta_dict)
@@ -508,13 +517,15 @@ def extract_meta_from_name(tag, meta_dict):
             if 'contentType' in tag.attrs['name'].strip().lower() and content not in meta_dict['content_type']:
                 meta_dict['content_type'] = (meta_dict['content_type'] + " " + content).strip()
 
-            if 'registrationRequired' in tag.attrs['name'].strip().lower() and content not in meta_dict['registration_required']:
+            if 'registrationRequired' in tag.attrs['name'].strip().lower() and content not in meta_dict[
+                'registration_required']:
                 meta_dict['registration_required'] = (meta_dict['registration_required'] + " " + content).strip()
 
             if 'customerType' in tag.attrs['name'].strip().lower() and content not in meta_dict['customer_type']:
                 meta_dict['customer_type'] = (meta_dict['customer_type'] + " " + content).strip()
 
-            if 'salesAvailability' in tag.attrs['name'].strip().lower() and content not in meta_dict['sales_availability']:
+            if 'salesAvailability' in tag.attrs['name'].strip().lower() and content not in meta_dict[
+                'sales_availability']:
                 meta_dict['sales_availability'] = (meta_dict['sales_availability'] + " " + content).strip()
     except Exception as e:
         print(str(e))
@@ -544,13 +555,15 @@ def extract_meta_from_property(tag, meta_dict):
             if 'contentType' in tag.attrs['property'].strip().lower() and content not in meta_dict['content_type']:
                 meta_dict['content_type'] = (meta_dict['content_type'] + " " + content).strip()
 
-            if 'registrationRequired' in tag.attrs['property'].strip().lower() and content not in meta_dict['registration_required']:
+            if 'registrationRequired' in tag.attrs['property'].strip().lower() and content not in meta_dict[
+                'registration_required']:
                 meta_dict['registration_required'] = (meta_dict['registration_required'] + " " + content).strip()
 
             if 'customerType' in tag.attrs['property'].strip().lower() and content not in meta_dict['customer_type']:
                 meta_dict['customer_type'] = (meta_dict['customer_type'] + " " + content).strip()
 
-            if 'salesAvailability' in tag.attrs['property'].strip().lower() and content not in meta_dict['sales_availability']:
+            if 'salesAvailability' in tag.attrs['property'].strip().lower() and content not in meta_dict[
+                'sales_availability']:
                 meta_dict['sales_availability'] = (meta_dict['sales_availability'] + " " + content).strip()
     except Exception as e:
         print(str(e))
@@ -564,14 +577,14 @@ def is_valid(url):
     if url:
         url = url.strip()
         url_list = url.split(".")
-        url_ext = url_list[len(url_list)-1].lower()
+        url_ext = url_list[len(url_list) - 1].lower()
         if len(url) > 1 and url_ext not in ['pdf', 'csv', 'zip', 'mp4', 'jpeg', 'png', 'gif', 'xml']:
             result = True
 
     return result
 
 
-def copy_file_data(files, source_folder,  destination_folder):
+def copy_file_data(files, source_folder, destination_folder):
     try:
         file_path = destination_folder + '/'
         if not os.path.exists(os.path.dirname(file_path)):
@@ -599,7 +612,7 @@ def test(f, day):
         if not os.path.isfile(f):
             return 0
         (mode, ino, dev, nlink, uid, gid, size, atime, mtime, ctime) = os.stat(f)
-        return start<=ctime and end>=ctime
+        return start <= ctime and end >= ctime
     except Exception as e:
         print(str(e))
 
@@ -621,7 +634,7 @@ def history_check(hist_path, website_list, days_history):
     return url_list, file_list
 
 
-def crawl_by_file(url_list, check_history, days_history, history_path,  out_path, internal_page, internal_page_limit):
+def crawl_by_file(url_list, check_history, days_history, history_path, out_path, internal_page, internal_page_limit):
     # Start time
 
     # start_time = time.time()
@@ -741,6 +754,8 @@ def get_url_to_scrap(file_path):
         url = ''
         if 'Url' in j:
             url = str(j['Url'])
+        elif 'urls' in j:
+            url = str(j['urls'])
         elif 'url' in j:
             url = str(j['url'])
         elif 'website' in j:
@@ -752,7 +767,7 @@ def get_url_to_scrap(file_path):
         if url == 'nan' or url == '-' or url == '':
             continue
 
-        #url_list.append(prepare_http_url(url))
+        # url_list.append(prepare_http_url(url))
         url_list.append(url)
     return url_list
 
@@ -1012,7 +1027,8 @@ def get_menu_from_class_name(soup_obj, menu_item):
             if isinstance(menu_name, type(None)) or not menu_name.strip():
                 menu_name = menu_name_wrapper.get_text().strip()
 
-            menu_item_wrapper = menu.find_all(['div', 'nav', 'a', 'li'], class_=ConstantService.get_menu_item_wrapper_class())
+            menu_item_wrapper = menu.find_all(['div', 'nav', 'a', 'li'],
+                                              class_=ConstantService.get_menu_item_wrapper_class())
             if len(menu_item_wrapper):
                 menu_list = [', '.join(item_div.find_all(text=True)) for item_div in menu_item_wrapper]
                 if len(menu_list):
@@ -1134,6 +1150,7 @@ def get_by_selenium(org_url, stime=10):
         return None
     else:
         return content
+
 
 # def get_by_selenium(org_url, stime=10):
 #     try:
@@ -1278,7 +1295,8 @@ def web_summary(out_path):
                 pass
             http_status = data["status_code"].iloc[0]
             companies_url = data["page_url"].iloc[0]
-            url_page.append({"Company_url": companies_url,"Status_code":http_status, "page_count": i + 1, "menu_count": len(menu_cols)})
+            url_page.append({"Company_url": companies_url, "Status_code": http_status, "page_count": i + 1,
+                             "menu_count": len(menu_cols)})
 
         df = pd.DataFrame()
         for i in url_page:
@@ -1288,12 +1306,7 @@ def web_summary(out_path):
         if not os.path.exists(os.path.dirname(file_path)):
             os.makedirs(os.path.dirname(file_path))
 
-        df.to_excel(file_path + "Summary" + '.xlsx', index=False)
+        df.to_excel(file_path + "Scrapping_data_Summary" + '.xlsx', index=False)
 
     except Exception as e:
         print(str(e))
-        
-
-
-
-        

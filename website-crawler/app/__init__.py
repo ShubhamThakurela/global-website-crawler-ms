@@ -34,6 +34,6 @@ api = Api(blueprint,
           )
 
 api.add_namespace(raw, path='/raw')
-# api.add_namespace(target, path='/target')
+api.add_namespace(target, path='/target')
 # api.add_namespace(semantic, path='/semantic')
 # api.add_namespace(ai, path='/ai')

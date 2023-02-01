@@ -1,7 +1,8 @@
 import pymysql
 
 #from app.main.service import config
-from app.main.database import config
+#from app.main.database import config
+from ..database import config
 
 CREDENTIALS = {
     'USERNAME': config.db['user'],

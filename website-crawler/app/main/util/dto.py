@@ -2,12 +2,12 @@ from flask_restplus import Namespace
 
 
 class RawDto:
-    api = Namespace('Raw Crawl', description='Unstructured data from website')
+    api = Namespace('Raw Crawl', description='Unstructured data from website (Beta v1.1.0)')
     raw = api.model('raw', {})
 
 
 class TargetBasedDto:
-    api = Namespace('Target-Based Crawl', description='Target-Based data from website (Beta v1.0.0)')
+    api = Namespace('Target- Crawl', description='Check Scrapping History (Beta v1.1.0)')
     target = api.model('target', {})
 
 

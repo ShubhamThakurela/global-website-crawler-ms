@@ -408,7 +408,7 @@ def request_data(page_url):
     for url in url_list:
         response_url = ''
         try:
-            response = requests.get(url, headers=headers, timeout=40, allow_redirects=True)
+            response = requests.get(url, headers=headers, timeout=120, allow_redirects=True)
             status_code = response.status_code
             response_url = response.url
             response_txt = response.content

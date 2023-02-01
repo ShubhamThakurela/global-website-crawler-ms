@@ -9,7 +9,7 @@ cffi==1.15.0
 charset-normalizer==2.0.10
 click==7.1.2
 et-xmlfile==1.1.0
-fake-useragent==0.1.11
+fake-useragent
 Flask==1.1.4
 Flask-Bcrypt==0.7.1
 Flask-Migrate==2.1.1

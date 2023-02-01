@@ -15,7 +15,7 @@ def run(url_list, check_history, days_history, history_path, out_path, internal_
 def execute(check_history, month_history, history_path, file_path, out_path, internal_page, internal_page_limit):
     try:
         start_time = time.time()
-        thread_count = 5
+        thread_count = 10
         url_list = get_url_to_scrap(file_path)
         if len(url_list) == 0:
             return ""

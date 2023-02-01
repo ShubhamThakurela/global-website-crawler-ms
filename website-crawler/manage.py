@@ -1,7 +1,8 @@
 import os
 import unittest
-from dotenv import load_dotenv
 
+from dotenv import load_dotenv
+from app.main.constant import paths
 # from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 
@@ -14,13 +15,16 @@ app.register_blueprint(blueprint)
 app.app_context().push()
 
 manager = Manager(app)
+
+
 # migrate = Migrate(app, db)
 # manager.add_command('db', MigrateCommand)
 
 
 @manager.command
 def run():
-    app.run()
+    if paths.mode == "Local":
+        app.run(port=5000)
 
 
 @manager.command

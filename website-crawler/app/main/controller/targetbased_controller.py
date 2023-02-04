@@ -20,7 +20,7 @@ upload_parser.add_argument('file', location='files', type=FileStorage)
 @api.route('/fetch_all_scrapped_companies_info')
 class TargetBasedCrawlUrlController(Resource):
     @api.doc(params={'start_date': {'description': '%Y-%m-%d', 'in': 'query', 'type': 'str'},
-                     'Http_status_code': {'description': '400,401,402,403,500,503,506', 'in': 'query', 'type': 'str'},
+                     'Http_status_code': {'description': '400,401,404,403,500,503,506', 'in': 'query', 'type': 'str'},
                      })
     def get(self):
         try:
